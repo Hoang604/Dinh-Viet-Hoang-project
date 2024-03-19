@@ -232,6 +232,7 @@ void modify(int id, student_list* list) {
 					continue;
 				}
 			} while (num);
+			list->arr[i].avg_grade = avg_grade(&(list->arr[i]));
 			return;
 		}
 	}
@@ -448,7 +449,6 @@ int write_to_mysql(student_list* list) {
 		return 0;
 	}
 	MYSQL* conn;
-
 	conn = mysql_init(NULL);
 	if (conn == NULL) {
 		fprintf(stderr, "mysql_init() failed\n");
@@ -486,6 +486,9 @@ int write_to_mysql(student_list* list) {
 		return 0;
 	}
 	mysql_close(conn);
+	free_student_list(list);
+	list = (student_list*)malloc(sizeof(student_list));
+	initialize_student_list(list, 10);
 	return 1;
 }
 void delete_from_mysql(int id) {
@@ -579,6 +582,7 @@ void case_4_5(int selection, student_list* list) {
 	if (selection == 4) {
 		if (list->size == 0) {
 			printf("Students list is empty.\n\n");
+			pause();
 			return;
 		}
 		printf("\n\n                                                ========LIST OF STUDENT=========\n\n");
