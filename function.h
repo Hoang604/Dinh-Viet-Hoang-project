@@ -459,7 +459,7 @@ int write_to_mysql(student_list* list) {
 		mysql_close(conn);
 		return 0;
 	}
-	char* query = (char*)malloc(sizeof(char) * 2000);
+	char* query = (char*)malloc(sizeof(char) * 5000);
 	int num = list->size;
 	int num_fields = 2;
 	strcpy(query, "insert ignore into student(id, fullname) value ");
