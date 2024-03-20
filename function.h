@@ -121,10 +121,10 @@ void display_infor_of_student(student s) {
 	printf("\n");
 }
 float avg_grade(student* s) {
-	float sum;
+	float sum = 0;
 	int n = sizeof(s->grades) / sizeof(float);
 	for (int i = 0; i < n; i++) {
-		sum = sum + s->grades[i];
+		sum += s->grades[i];
 	}
 	float grade = sum / n;
 	return grade;
@@ -161,6 +161,7 @@ void avg_grade2(student_list* list) {
 void avg_grade_in_list(student_list* list) {
 	if (list->size == 0) {
 		puts("Students list is empty.");
+		pause();
 		return;
 	}
 	puts("Average grade of all students in the list: ");
@@ -222,9 +223,11 @@ void modify(int id, student_list* list) {
 					while (!my_scanf("%f", &(list->arr[i].grades[num - 3]))) {
 						printf("Please enter an integer.\n");
 					}
+					list->arr[i].avg_grade = avg_grade(&(list->arr[i]));
 				}
 				else if (num == 0) {
 					printf("Exit successfully.");
+					pause();
 					break;
 				}
 				else {
@@ -232,7 +235,6 @@ void modify(int id, student_list* list) {
 					continue;
 				}
 			} while (num);
-			list->arr[i].avg_grade = avg_grade(&(list->arr[i]));
 			return;
 		}
 	}
@@ -519,7 +521,7 @@ void display(student_list* list) {
 	int n = list->size;
 	int k = sizeof(list->arr[0].grades) / sizeof(float);
 	for (int i = 0; i < n; i++) {
-		printf("|%-10d| %-23s", list->arr[i].id, list->arr[i].full_name);
+		printf("|  %-4d|%-10d| %-23s", i + 1, list->arr[i].id, list->arr[i].full_name);
 		for (int j = 0; j < k - 1; j++) {
 			printf("|  %-5.2f ", list->arr[i].grades[j]);
 		}
@@ -530,13 +532,13 @@ void display(student_list* list) {
 }
 void display_all_student_in_the_list(student_list list) {
 	int n = list.size;
-	puts(" _______________________________________________________________________________________________________________________________");
-	puts("|         Identification            |                                         Grades                                            |");
-	puts("|___________________________________|___________________________________________________________________________________________|");
-	puts("|    ID    |       Full name        |  Math  |  Lit.  |  Eng.  | Physic |  Che.  |  Bio.  |  His.  |  Geo.  |Comp. Sci.|   Avg  |");
-	puts("|__________|________________________|________|________|________|________|________|________|________|________|__________|________|");
+	puts(" _______________________________________________________________________________________________________________________________________");
+	puts("|      |         Identification            |                                         Grades                                            |");
+	puts("|S. No.|___________________________________|___________________________________________________________________________________________|");
+	puts("|      |    ID    |       Full name        |  Math  |  Lit.  |  Eng.  | Physic |  Che.  |  Bio.  |  His.  |  Geo.  |Comp. Sci.|   Avg  |");
+	puts("|______|__________|________________________|________|________|________|________|________|________|________|________|__________|________|");
 	display(&list);
-	puts("|__________|________________________|________|________|________|________|________|________|________|________|__________|________|");
+	puts("|______|__________|________________________|________|________|________|________|________|________|________|________|__________|________|");
 }
 void display_all_student_in_the_database() {
 	student_list* list = (student_list*)malloc(sizeof(student_list));
@@ -653,7 +655,7 @@ void case_11(student_list* list) {
 	pause();
 }
 void case_12_13(int selection, student_list* list) {
-	if (selection == 13) {
+	if (selection == 12) {
 		number_of_student(list);
 	}
 	else {
@@ -664,7 +666,7 @@ void case_12_13(int selection, student_list* list) {
 int exit() {
 	char decision;
 	do {
-		printf("Are you sure you want to exit the menu option? (Y/N)  ");
+		printf("Are you sure that you want to exit the program? (Y/N)  ");
 		my_scanf("%c", &decision);
 		if (decision == 'y' || decision == 'Y' || decision == 'n' || decision == 'N') {
 			break;
