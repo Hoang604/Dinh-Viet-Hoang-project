@@ -16,7 +16,6 @@ int main() {
 	student_list* list = (student_list*)malloc(sizeof(student_list));
 	initialize_student_list(list, 10);
 	int selection;
-	char in;
 	do {
 		printf("===========STUDENT MANAGEMENT PROGRAM===========\n\n");
 		printf("1. Add a new student to the student list.\n");
