@@ -33,10 +33,10 @@ void number_of_student(student_list* list);
 // my safer scanf
 int my_scanf(const char*, void*);
 void display(student_list* list);
-int read_from_mysql(student_list*, int);
-int write_to_mysql(student_list*);
-void delete_from_mysql(int);
-int find_from_mysql(int, student_list*);
+int read_from_mysql(student_list* list, int list_size);
+int write_to_mysql(student_list* list);
+void delete_from_mysql(int id);
+int find_from_mysql(int id, student_list*);
 int exit();
 void case_1(student_list* list);
 void case_2_3(int decision, student_list* list);
@@ -298,7 +298,7 @@ void case_1(student_list* list) {
 		printf("\nStudent with ID %d was added to the list.\n", s.id);
 	pause();
 }
-int read_from_mysql(student_list* list, int size) {
+int read_from_mysql(student_list* list, int list_size) {
 	MYSQL* conn;
 	MYSQL_RES* result;
 	MYSQL_ROW row;
@@ -350,7 +350,7 @@ int read_from_mysql(student_list* list, int size) {
 			list->arr = (student*)realloc(list->arr, list->capacity * sizeof(student));
 		}
 		int label = 1;
-		for (int i = 0; i < size; i++) {
+		for (int i = 0; i < list_size; i++) {
 			if (s.id == list->arr[i].id) {
 				label = 0;
 				break;
