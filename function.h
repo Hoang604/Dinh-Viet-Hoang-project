@@ -21,7 +21,7 @@ int add_student_to_student_list(student_list* list, student new_student);
 // find student base on ID
 void find(int id, student_list* list);
 // modify student base on ID
-void modify(int id, student_list*);
+int modify(int id, student_list*);
 // delete student in the list base on ID
 void deletion(int id, student_list* list);
 void display_all_student_in_the_list(student_list);
@@ -150,6 +150,10 @@ float avg_grade(student* s) {
 void avg_grade2(student_list* list) {
 	student s;
 	float k;
+	float max = 0.0;
+	int max_index;
+	float min = 10.0;
+	int min_index;
 	int n = list->size;
 	int m = sizeof(s.grades) / sizeof(float);
 	for (int i = 0; i < m; i++) {
@@ -158,6 +162,14 @@ void avg_grade2(student_list* list) {
 			k += list->arr[j].grades[i];
 		}
 		s.grades[i] = k / n;
+		if (s.grades[i] > max) {
+			max = s.grades[i];
+			max_index = i;
+		}
+		if (s.grades[i] < min) {
+			min = s.grades[i];
+			min_index = i;
+		}
 	}
 	k = 0;
 	for (int i = 0; i < n; i++) {
@@ -173,7 +185,10 @@ void avg_grade2(student_list* list) {
 	printf("|   %-5.2f  ", s.grades[m - 1]);
 	printf("|  %.2f   |", s.avg_grade);
 	printf("\n");
-	puts("|________|________|________|________|________|________|________|________|__________|_________|");
+	puts("|________|________|________|________|________|________|________|________|__________|_________|\n");
+	char subjects[9][17] = { "Math", "Literature", "English", "Physics", "Chemistry", "Biology", "History", "Geography", "Computer Science" };
+	printf("%s has the highest average grade, with a score of %.2f.\n", subjects[max_index], max);
+	printf("%s has the lowest average grade, with a score of %.2f.\n", subjects[min_index], min);
 	pause();
 }
 void avg_grade_in_list(student_list* list) {
@@ -206,7 +221,7 @@ void find(int id, student_list* list) {
 	}
 	printf("There are no student with id %d in the student list.", id);
 }
-void modify(int id, student_list* list) {
+int modify(int id, student_list* list) {
 	int n = list->size;
 	for (int i = 0; i < n; i++) {
 		if (list->arr[i].id == id) {
@@ -253,11 +268,10 @@ void modify(int id, student_list* list) {
 					continue;
 				}
 			} while (num);
-			return;
+			return 1;
 		}
 	}
-	printf("There are no student with ID %d in the school.\n", id);
-	pause();
+	return 0;
 }
 void deletion(int id, student_list* list) {
 	int n = list->size;
@@ -586,13 +600,20 @@ void case_2_3(int selection, student_list* list) {
 		printf("Please enter an integer.\n");
 	}
 
-	if (selection == 2)
-		modify(id, list);
+	if (selection == 2) {
+		if (!modify(id, list)) {
+			printf("There are no student with ID %d in the list.\n", id);
+			pause();
+		}
+	}
 	else {
 		student_list* temp_list = (student_list*)malloc(sizeof(student_list));
 		initialize_student_list(temp_list, 1);
 		find_from_mysql(id, temp_list);
-		modify(id, temp_list);
+		if (!modify(id, temp_list)) {
+			printf("There are no student with ID %d in the database.\n", id);
+			pause();
+		}
 		delete_from_mysql(id);
 		write_to_mysql(temp_list);
 		free_student_list(temp_list);
