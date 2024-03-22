@@ -63,14 +63,33 @@ void initialize_student_list(student_list* list, int initial_capacity) {
 	list->capacity = initial_capacity;
 	list->size = 0;
 }
+void add_base_on_avg_grade(student_list* list, student new_student) {
+	list->arr[5] = new_student;
+	int index = 0;
+	int n = list->size;
+	list->size++;
+	while (index < n) {
+		if (new_student.avg_grade < list->arr[index].avg_grade) {
+			index++;
+			continue;
+		}
+		break;
+	}
+	if (index != n) {
+		for (int i = n - 1; i >= index; i--) {
+			list->arr[i + 1] = list->arr[i];
+		}
+	}
+	list->arr[index] = new_student;
+}
 int add_student_to_student_list(student_list* list, student new_student) {
 	if (list->size == list->capacity) {
 		list->capacity *= 2;
 		list->arr = (student*)realloc(list->arr, list->capacity * sizeof(student));
 	}
-	student_list temp_list;
-	initialize_student_list(&temp_list, 1);
-	if (find_from_mysql(new_student.id, &temp_list)) {
+	student_list* temp_list;
+	initialize_student_list(temp_list, 1);
+	if (find_from_mysql(new_student.id, temp_list)) {
 		printf("The student with id %d is already exist in the school database.\n", new_student.id);
 		return 0;
 	}
@@ -81,8 +100,7 @@ int add_student_to_student_list(student_list* list, student new_student) {
 			return 0;
 		}
 	}
-	list->arr[list->size] = new_student;
-	list->size++;
+	add_base_on_avg_grade(list, new_student);
 	return 1;
 }
 void free_student_list(student_list* list) {
@@ -146,16 +164,16 @@ void avg_grade2(student_list* list) {
 		k += list->arr[i].avg_grade;
 	}
 	s.avg_grade = k / n;
-	puts(" ___________________________________________________________________________________________");
-	puts("|  Math  |  Lit.  |  Eng.  | Physic |  Che.  |  Bio.  |  His.  |  Geo.  |Comp. Sci.|   Avg  |");
-	puts("|________|________|________|________|________|________|________|________|__________|________|");
+	puts(" ____________________________________________________________________________________________");
+	puts("|  Math  |  Lit.  |  Eng.  | Physic |  Che.  |  Bio.  |  His.  |  Geo.  |Comp. Sci.| Average |");
+	puts("|________|________|________|________|________|________|________|________|__________|_________|");
 	for (int j = 0; j < m - 1; j++) {
 		printf("|  %-5.2f ", s.grades[j]);
 	}
 	printf("|   %-5.2f  ", s.grades[m - 1]);
-	printf("|  %.2f  |", s.avg_grade);
+	printf("|  %.2f   |", s.avg_grade);
 	printf("\n");
-	puts("|________|________|________|________|________|________|________|________|__________|________|");
+	puts("|________|________|________|________|________|________|________|________|__________|_________|");
 	pause();
 }
 void avg_grade_in_list(student_list* list) {
@@ -313,7 +331,7 @@ int read_from_mysql(student_list* list, int list_size) {
 		mysql_close(conn);
 		return 0;
 	}
-	if (mysql_query(conn, "select student.id, fullname, math, literature, english, physic, chemistry, biology, history, geography, computer_science, avg_grade from student, grades where student.id = grades.id")) {
+	if (mysql_query(conn, "select student.id, fullname, math, literature, english, physic, chemistry, biology, history, geography, computer_science, avg_grade from student, grades where student.id = grades.id order by avg_grade desc")) {
 		fprintf(stderr, "mysql_query failed: %s\n", mysql_error(conn));
 		mysql_close(conn);
 		return 0;
@@ -532,7 +550,7 @@ void display(student_list* list) {
 }
 void display_all_student_in_the_list(student_list list) {
 	int n = list.size;
-	puts(" _______________________________________________________________________________________________________________________________________");
+	puts(" ______________________________________________________________________________________________________________________________________");
 	puts("|      |         Identification            |                                         Grades                                            |");
 	puts("|S. No.|___________________________________|___________________________________________________________________________________________|");
 	puts("|      |    ID    |       Full name        |  Math  |  Lit.  |  Eng.  | Physic |  Che.  |  Bio.  |  His.  |  Geo.  |Comp. Sci.|   Avg  |");
