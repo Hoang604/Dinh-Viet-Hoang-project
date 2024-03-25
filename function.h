@@ -24,7 +24,7 @@ void find(int id, student_list* list);
 int modify(int id, student_list*);
 // delete student in the list base on ID
 void deletion(int id, student_list* list);
-void display_all_student_in_the_list(student_list);
+void display_all_student_in_the_list(student_list* list);
 void display_all_student_in_the_database();
 // stop console
 void pause();
@@ -562,14 +562,14 @@ void display(student_list* list) {
 		printf("\n");
 	}
 }
-void display_all_student_in_the_list(student_list list) {
-	int n = list.size;
+void display_all_student_in_the_list(student_list* list) {
+	int n = list->size;
 	puts(" ______________________________________________________________________________________________________________________________________");
 	puts("|      |         Identification            |                                         Grades                                            |");
 	puts("|S. No.|___________________________________|___________________________________________________________________________________________|");
 	puts("|      |    ID    |       Full name        |  Math  |  Lit.  |  Eng.  | Physic |  Che.  |  Bio.  |  His.  |  Geo.  |Comp. Sci.|   Avg  |");
 	puts("|______|__________|________________________|________|________|________|________|________|________|________|________|__________|________|");
-	display(&list);
+	display(list);
 	puts("|______|__________|________________________|________|________|________|________|________|________|________|________|__________|________|");
 }
 void display_all_student_in_the_database() {
@@ -579,7 +579,7 @@ void display_all_student_in_the_database() {
 	if (list->size == 0) {
 		printf("Database empty!\n");
 	}
-	display_all_student_in_the_list(*list);
+	display_all_student_in_the_list(list);
 	free_student_list(list);
 }
 void number_of_student(student_list* list) {
@@ -627,7 +627,7 @@ void case_4_5(int selection, student_list* list) {
 			return;
 		}
 		printf("\n\n                                                ========LIST OF STUDENT=========\n\n");
-		display_all_student_in_the_list(*list);
+		display_all_student_in_the_list(list);
 	}
 	else {
 		printf("\n\n                                                ========LIST OF STUDENT=========\n\n");
@@ -652,7 +652,7 @@ void case_6_7(int selection, student_list* list) {
 		student_list* temp_list = (student_list*)malloc(sizeof(student_list));
 		initialize_student_list(temp_list, 1);
 		if (find_from_mysql(id, temp_list)) {
-			display_all_student_in_the_list(*temp_list);
+			display_all_student_in_the_list(temp_list);
 		}
 		else {
 			printf("\nThere are no student with ID %d in the school database.\n", id);
