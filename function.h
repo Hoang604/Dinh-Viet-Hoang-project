@@ -210,6 +210,7 @@ void avg_grade_in_database() {
 	}
 	puts("Average grade of all students in the school database: ");
 	avg_grade2(list);
+	free_student_list(list);
 }
 void find(int id, student_list* list) {
 	int n = list->size;
@@ -445,6 +446,7 @@ int find_from_mysql(int id, student_list* list) {
 	sprintf(str, "%d", id);
 	strcat(query, str);
 	if (mysql_query(conn, query)) {
+		free(query);
 		fprintf(stderr, "mysql_query failed: %s\n", mysql_error(conn));
 		mysql_close(conn);
 		return 0;
