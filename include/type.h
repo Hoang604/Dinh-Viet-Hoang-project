@@ -1,3 +1,5 @@
+#ifndef TYPE_H
+#define TYPE_H
 #include <stdio.h>
 typedef struct student {
 	char full_name[24];
@@ -10,3 +12,4 @@ typedef struct student_list {
 	int capacity; // capacity of the array
 	int size; // number of student 
 } student_list;
+#endif

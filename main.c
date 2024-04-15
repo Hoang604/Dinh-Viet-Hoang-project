@@ -1,5 +1,5 @@
-#include <stdio.h>
-#include "function.h"
+#include <function.h>
+#include <stdlib.h>
 int main() {
 	printf("WELCOME TO THE STUDENT MANAGEMENT PROGRAM\n\n");
 	printf("This program is designed to manage student information.\n\n");
@@ -10,7 +10,7 @@ int main() {
 		my_scanf("%d", &choice);
 	} while (choice != 1 && choice != 2);
 	if (choice == 2) {
-		printf("Exit program successfully.");
+		printf("Exit program successfully.\n");
 		return 0;
 	}
 	student_list* list = (student_list*)malloc(sizeof(student_list));
@@ -69,7 +69,7 @@ int main() {
 			avg_grade_in_database();
 		}
 		else if (selection == 0) {
-			int e = exit();
+			int e = exit_();
 			if (e == 1) {
 				break;
 			}

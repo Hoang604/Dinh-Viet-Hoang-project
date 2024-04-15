@@ -1,6 +1,4 @@
-#include <stdio.h>
-#include<string.h>
-#include <stdlib.h>
+#include <std_string.h>
 bool is_white_space(char x) {
 	return x == ' ' || x == '\n' || x == '\t' || x == '\r';
 }
